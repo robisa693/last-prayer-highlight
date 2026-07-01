@@ -1,5 +1,5 @@
 # Last Prayer Highlight
-![Demo](https://i.imgur.com/GbvQcqO.gif)
+![Demo](https://i.imgur.com/nK2QHag.gif)
 
 Highlights the last used protection prayer on the prayer tab.
 
