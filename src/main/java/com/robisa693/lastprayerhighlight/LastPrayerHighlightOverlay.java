@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.lastprayerhighlight;
+package com.robisa693.lastprayerhighlight;
 
 import net.runelite.api.Client;
 import net.runelite.api.Prayer;
