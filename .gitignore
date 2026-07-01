@@ -1,0 +1,12 @@
+build/
+target/
+*.jar
+!runelite-plugin.properties
+.gradle/
+*.class
+*.log
+.idea/
+*.iml
+.settings/
+.project
+.classpath
