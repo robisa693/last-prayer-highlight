@@ -87,10 +87,18 @@ public class LastPrayerHighlightPlugin extends Plugin
             detected = Prayer.PROTECT_FROM_MELEE;
         }
 
+        if (!config.showInfobox())
+        {
+            removeInfoBox();
+        }
+        else if (detected != null)
+        {
+            updateInfoBox(detected);
+        }
+
         if (detected != null)
         {
             lastProtectionPrayer = detected;
-            updateInfoBox(detected);
         }
     }
 
