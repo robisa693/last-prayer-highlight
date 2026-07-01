@@ -10,7 +10,7 @@ When you switch between Protect from Magic, Missiles, or Melee, the last used on
 - Highlights the protection prayer widget on the prayer tab with a configurable color
 - Optional infobox showing a colored tile with the prayer name
 - Works with both standard and quick-prayer activation
-- Lightweight polling (every 600ms) — no event bus dependency
+- Instant response — uses event-driven varbit tracking
 
 ## Configuration
 
