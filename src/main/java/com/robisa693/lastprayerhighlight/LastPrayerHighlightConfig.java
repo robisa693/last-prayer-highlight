@@ -92,5 +92,4 @@ public interface LastPrayerHighlightConfig extends Config
     {
         return Color.WHITE;
     }
-
 }

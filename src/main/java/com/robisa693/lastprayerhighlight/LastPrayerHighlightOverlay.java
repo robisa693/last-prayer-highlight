@@ -69,8 +69,8 @@ public class LastPrayerHighlightOverlay extends Overlay
             lastHighlightColor = highlightColor;
             lastFillOpacity = fillOpacity;
             lastBorderOpacity = borderOpacity;
-            int fillAlpha = fillOpacity * 255 / 100;
-            int borderAlpha = borderOpacity * 255 / 100;
+            int fillAlpha = Math.max(0, Math.min(100, fillOpacity)) * 255 / 100;
+            int borderAlpha = Math.max(0, Math.min(100, borderOpacity)) * 255 / 100;
             translucentFillColor = new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), fillAlpha);
             translucentBorderColor = new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), borderAlpha);
         }
