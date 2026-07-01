@@ -1,5 +1,5 @@
 # Last Prayer Highlight
-
+![Demo](demo.gif)
 Highlights the last used protection prayer on the prayer tab.
 
 When you switch between Protect from Magic, Missiles, or Melee, the last used one stays highlighted so you always know which protection prayer you were using last — even when the prayer has deactivated or you're prayer-flicking.
