@@ -13,6 +13,8 @@ public class LastPrayerHighlightOverlay extends Overlay
 {
     private final Client client;
     private final LastPrayerHighlightPlugin plugin;
+    private Color lastHighlightColor;
+    private Color translucentHighlightColor;
 
     public LastPrayerHighlightOverlay(Client client, LastPrayerHighlightPlugin plugin)
     {
@@ -51,7 +53,12 @@ public class LastPrayerHighlightOverlay extends Overlay
         }
 
         Color highlightColor = config.highlightColor();
-        graphics.setColor(new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), 100));
+        if (!highlightColor.equals(lastHighlightColor))
+        {
+            lastHighlightColor = highlightColor;
+            translucentHighlightColor = new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), 100);
+        }
+        graphics.setColor(translucentHighlightColor);
         graphics.fillRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 6, 6);
 
         graphics.setColor(highlightColor);
@@ -63,21 +70,21 @@ public class LastPrayerHighlightOverlay extends Overlay
 
     private Widget getPrayerWidget(Prayer prayer)
     {
-        int childId;
+        int packedId;
         switch (prayer)
         {
             case PROTECT_FROM_MAGIC:
-                childId = InterfaceID.Prayerbook.PRAYER13 & 0xFFFF;
+                packedId = InterfaceID.Prayerbook.PRAYER13;
                 break;
             case PROTECT_FROM_MISSILES:
-                childId = InterfaceID.Prayerbook.PRAYER14 & 0xFFFF;
+                packedId = InterfaceID.Prayerbook.PRAYER14;
                 break;
             case PROTECT_FROM_MELEE:
-                childId = InterfaceID.Prayerbook.PRAYER15 & 0xFFFF;
+                packedId = InterfaceID.Prayerbook.PRAYER15;
                 break;
             default:
                 return null;
         }
-        return client.getWidget(InterfaceID.PRAYERBOOK, childId);
+        return client.getWidget(packedId);
     }
 }

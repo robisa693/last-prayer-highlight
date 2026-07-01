@@ -74,9 +74,11 @@ public class LastPrayerHighlightPlugin extends Plugin
             future.cancel(false);
             future = null;
         }
-        overlayManager.remove(overlay);
-        removeInfoBox();
-        lastProtectionPrayer = null;
+        clientThread.invoke(() -> {
+            overlayManager.remove(overlay);
+            removeInfoBox();
+            lastProtectionPrayer = null;
+        });
     }
 
     private void pollProtectionPrayers()
@@ -106,6 +108,12 @@ public class LastPrayerHighlightPlugin extends Plugin
 
     private void updateInfoBox(Prayer prayer)
     {
+        if (!config.showInfobox())
+        {
+            removeInfoBox();
+            return;
+        }
+
         if (infoBox != null && infoBox.prayer == prayer)
         {
             return;
@@ -113,18 +121,13 @@ public class LastPrayerHighlightPlugin extends Plugin
 
         removeInfoBox();
 
-        if (!config.showInfobox())
-        {
-            return;
-        }
-
         BufferedImage image = createPrayerIcon(prayer);
         if (image == null)
         {
             return;
         }
 
-        infoBox = new PrayerInfoBox(image, this, prayer);
+        infoBox = new PrayerInfoBox(image, this, prayer, config);
         infoBoxManager.addInfoBox(infoBox);
     }
 
@@ -179,14 +182,16 @@ public class LastPrayerHighlightPlugin extends Plugin
         return config;
     }
 
-    private class PrayerInfoBox extends InfoBox
+    private static class PrayerInfoBox extends InfoBox
     {
         private final Prayer prayer;
+        private final LastPrayerHighlightConfig config;
 
-        PrayerInfoBox(BufferedImage image, Plugin plugin, Prayer prayer)
+        PrayerInfoBox(BufferedImage image, Plugin plugin, Prayer prayer, LastPrayerHighlightConfig config)
         {
             super(image, plugin);
             this.prayer = prayer;
+            this.config = config;
         }
 
         @Override
