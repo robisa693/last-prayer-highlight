@@ -9,14 +9,12 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBox;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
-import net.runelite.client.callback.ClientThread;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.api.events.VarbitChanged;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ScheduledFuture;
 
 @PluginDescriptor(
     name = "Last Prayer Highlight",
@@ -39,17 +37,10 @@ public class LastPrayerHighlightPlugin extends Plugin
     private Client client;
 
     @Inject
-    private ClientThread clientThread;
-
-    @Inject
-    private ScheduledExecutorService executor;
-
-    @Inject
     private InfoBoxManager infoBoxManager;
 
     private LastPrayerHighlightOverlay overlay;
     private Prayer lastProtectionPrayer = null;
-    private ScheduledFuture<?> future;
     private PrayerInfoBox infoBox;
 
     @Provides
@@ -63,47 +54,44 @@ public class LastPrayerHighlightPlugin extends Plugin
     {
         overlay = new LastPrayerHighlightOverlay(client, this);
         overlayManager.add(overlay);
-        future = executor.scheduleAtFixedRate(this::pollProtectionPrayers, 0, 600, TimeUnit.MILLISECONDS);
     }
 
     @Override
     protected void shutDown()
     {
-        if (future != null)
-        {
-            future.cancel(false);
-            future = null;
-        }
-        clientThread.invoke(() -> {
-            overlayManager.remove(overlay);
-            removeInfoBox();
-            lastProtectionPrayer = null;
-        });
+        overlayManager.remove(overlay);
+        removeInfoBox();
+        lastProtectionPrayer = null;
     }
 
-    private void pollProtectionPrayers()
+    @Subscribe
+    public void onVarbitChanged(VarbitChanged event)
     {
-        clientThread.invokeLater(() -> {
-            Prayer detected = null;
-            if (client.getVarbitValue(PROTECT_FROM_MAGIC_VARBIT) == 1)
-            {
-                detected = Prayer.PROTECT_FROM_MAGIC;
-            }
-            else if (client.getVarbitValue(PROTECT_FROM_MISSILES_VARBIT) == 1)
-            {
-                detected = Prayer.PROTECT_FROM_MISSILES;
-            }
-            else if (client.getVarbitValue(PROTECT_FROM_MELEE_VARBIT) == 1)
-            {
-                detected = Prayer.PROTECT_FROM_MELEE;
-            }
+        int id = event.getVarbitId();
+        if (id != PROTECT_FROM_MAGIC_VARBIT && id != PROTECT_FROM_MISSILES_VARBIT && id != PROTECT_FROM_MELEE_VARBIT)
+        {
+            return;
+        }
 
-            if (detected != null)
-            {
-                lastProtectionPrayer = detected;
-                updateInfoBox(detected);
-            }
-        });
+        Prayer detected = null;
+        if (client.getVarbitValue(PROTECT_FROM_MAGIC_VARBIT) == 1)
+        {
+            detected = Prayer.PROTECT_FROM_MAGIC;
+        }
+        else if (client.getVarbitValue(PROTECT_FROM_MISSILES_VARBIT) == 1)
+        {
+            detected = Prayer.PROTECT_FROM_MISSILES;
+        }
+        else if (client.getVarbitValue(PROTECT_FROM_MELEE_VARBIT) == 1)
+        {
+            detected = Prayer.PROTECT_FROM_MELEE;
+        }
+
+        if (detected != null)
+        {
+            lastProtectionPrayer = detected;
+            updateInfoBox(detected);
+        }
     }
 
     private void updateInfoBox(Prayer prayer)

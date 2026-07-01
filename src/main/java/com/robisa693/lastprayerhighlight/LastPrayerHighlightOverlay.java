@@ -46,6 +46,12 @@ public class LastPrayerHighlightOverlay extends Overlay
             return null;
         }
 
+        Widget parent = widget.getParent();
+        if (parent != null && parent.isHidden())
+        {
+            return null;
+        }
+
         Rectangle bounds = widget.getBounds();
         if (bounds == null || bounds.width <= 0 || bounds.height <= 0)
         {
