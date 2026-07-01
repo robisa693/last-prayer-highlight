@@ -19,6 +19,8 @@ Open RuneLite settings → _Last Prayer Highlight_:
 | Setting | Default | Description |
 |---|---|---|
 | Highlight Color | Yellow | Color of the prayer tab overlay |
+| Highlight Opacity | 40 | Opacity of the highlight fill (0–100) |
+| Highlight Border Opacity | 100 | Opacity of the highlight border (0–100) |
 | Show on Prayer Tab | On | Toggle the prayer tab highlight on/off |
 | Show Infobox | Off | Toggle the infobox on/off |
 | Infobox Text Color | White | Color of the text on the infobox tile |

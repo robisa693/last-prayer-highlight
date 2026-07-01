@@ -14,7 +14,10 @@ public class LastPrayerHighlightOverlay extends Overlay
     private final Client client;
     private final LastPrayerHighlightPlugin plugin;
     private Color lastHighlightColor;
-    private Color translucentHighlightColor;
+    private int lastFillOpacity = -1;
+    private int lastBorderOpacity = -1;
+    private Color translucentFillColor;
+    private Color translucentBorderColor;
 
     public LastPrayerHighlightOverlay(Client client, LastPrayerHighlightPlugin plugin)
     {
@@ -59,15 +62,22 @@ public class LastPrayerHighlightOverlay extends Overlay
         }
 
         Color highlightColor = config.highlightColor();
-        if (!highlightColor.equals(lastHighlightColor))
+        int fillOpacity = config.highlightOpacity();
+        int borderOpacity = config.highlightBorderOpacity();
+        if (!highlightColor.equals(lastHighlightColor) || fillOpacity != lastFillOpacity || borderOpacity != lastBorderOpacity)
         {
             lastHighlightColor = highlightColor;
-            translucentHighlightColor = new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), 100);
+            lastFillOpacity = fillOpacity;
+            lastBorderOpacity = borderOpacity;
+            int fillAlpha = fillOpacity * 255 / 100;
+            int borderAlpha = borderOpacity * 255 / 100;
+            translucentFillColor = new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), fillAlpha);
+            translucentBorderColor = new Color(highlightColor.getRed(), highlightColor.getGreen(), highlightColor.getBlue(), borderAlpha);
         }
-        graphics.setColor(translucentHighlightColor);
+        graphics.setColor(translucentFillColor);
         graphics.fillRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 6, 6);
 
-        graphics.setColor(highlightColor);
+        graphics.setColor(translucentBorderColor);
         graphics.setStroke(new BasicStroke(2));
         graphics.drawRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 6, 6);
 
