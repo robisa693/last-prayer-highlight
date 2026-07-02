@@ -1,4 +1,6 @@
 # Last Prayer Highlight
+This was removed from plugin-hub for break the jagex third party guidelines!
+
 ![Demo](https://i.imgur.com/nK2QHag.gif)
 
 Highlights the last used protection prayer on the prayer tab.
