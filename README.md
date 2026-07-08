@@ -1,5 +1,5 @@
 # Last Prayer Highlight
-This was removed from plugin-hub for break the jagex third party guidelines!
+This was removed from plugin-hub for breaking the jagex third party guidelines!
 
 ![Demo](https://i.imgur.com/nK2QHag.gif)
 
